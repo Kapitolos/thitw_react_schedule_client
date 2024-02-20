@@ -208,6 +208,9 @@ const handleDateChange = (date, name) => {
                                             bookedDates={staffData[selectedStaff]?.booked_off_dates || []}
                                         />
                                     </div>
+                                    <div id="maxshiftstext">Max Shifts
+                                    <input id="maxshiftsinput" type="number" value={staffData[staffName].max_shifts} onChange={(e) => handleMaxShiftsChange(staffName, e.target.value)} />
+                                    </div>
                                     {/* Pass only the selected staff's data to the StaffEditor */}
                                     <StaffEditor 
                                         staffData={staffData[selectedStaff]} 
@@ -215,9 +218,7 @@ const handleDateChange = (date, name) => {
                                         onUpdateStaffData={handleUpdateStaffData}
                                         onRemoveStaff={handleRemoveStaff}
                                     />
-                                    <div id="maxshiftstext">Max Shifts
-                                    <input id="maxshiftsinput" type="number" value={staffData[staffName].max_shifts} onChange={(e) => handleMaxShiftsChange(staffName, e.target.value)} />
-                                    </div>
+
                                 </div>
                             )}
                         </li>
@@ -230,7 +231,7 @@ const handleDateChange = (date, name) => {
                     value={newStaffName}
                     onChange={(e) => setNewStaffName(e.target.value)}
                 />
-                <button onClick={addStaffMember}>Add Staff Member</button>
+                <button id="addStaffButton" onClick={addStaffMember}>Add Staff Member</button>
             </div>
             </div>
         </div>

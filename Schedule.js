@@ -35,6 +35,14 @@ function Schedule() {
     // At the beginning of the Schedule component, add a new state for restrictedSlots
 const [restrictedSlots, setRestrictedSlots] = useState({});
 
+    // State to manage the visibility of the RestrictedSlotsEditor
+    const [showRestrictedSlotsEditor, setShowRestrictedSlotsEditor] = useState(false);
+
+    // Toggle function
+    const toggleRestrictedSlotsEditor = () => {
+        setShowRestrictedSlotsEditor(prevState => !prevState);
+    };
+
 
 
     const areEnoughShiftsAvailable = () => {
@@ -110,19 +118,15 @@ const updateRestrictedSlots = (updatedSlots) => {
   };
     
 
-    const isStaffAvailable = (staff, venue, time, day) => {
-        if (time === "lunch") {
-            return staffData[staff] &&
-                staffData[staff][venue] &&
-                staffData[staff][venue][time] &&
-                staffData[staff][venue][time].includes(day);
-        } else {
-            return staffData[staff] &&
-                staffData[staff][venue] &&
-                staffData[staff][venue]["evening"] &&
-                staffData[staff][venue]["evening"].includes(day);
-        }
-    };
+  const isStaffAvailable = (staff, venue, time, day) => {
+    // Check if staff, venue, and time data exist
+    if (!staffData[staff] || !staffData[staff][venue] || !staffData[staff][venue][time]) {
+        return false; // Not available if any data is missing
+    }
+
+    // Check if the staff is available on the specified day
+    return staffData[staff][venue][time].includes(day);
+};
 
     const isStaffBookedOff = (staffName, date) => {
         const formattedDate = format(date, 'yyyy-MM-dd');
@@ -345,12 +349,18 @@ for (let slot of slots) {
                     </tbody>
                 </table>
                 <SaveScheduleButton schedule={currentSchedule} startDate={startDate}/>
-                    {/* Add the RestrictedSlotsEditor here */}
-    <RestrictedSlotsEditor
-      restrictedSlots={restrictedSlots}
-      onUpdateRestrictedSlots={updateRestrictedSlots}
- 
-    />
+           {/* Toggle Button */}
+           <button id="restrictedShowButton" onClick={toggleRestrictedSlotsEditor}>
+                {showRestrictedSlotsEditor ? 'Hide Venue Days' : 'Show Venue Days'}
+            </button>
+
+            {/* Conditionally render the RestrictedSlotsEditor */}
+            {showRestrictedSlotsEditor && (
+                <RestrictedSlotsEditor
+                    restrictedSlots={restrictedSlots}
+                    onUpdateRestrictedSlots={updateRestrictedSlots}
+                />
+            )}
             </div>
         );
     }
