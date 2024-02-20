@@ -278,3 +278,86 @@ color: white;
   left: 50%; /* Adjust as needed */
   transform: translate(-50%, -50%); /* Centers the GIF */
 }
+
+@media only screen and (max-width: 450px) {
+  .App-header {
+    background-image: none;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+  
+  
+  #datepicker {
+    margin-left: 4%;
+    margin-top: -100px;
+  }
+  #staffshiftsummary {
+    display:none;
+}
+#stafflist {
+  border: 1px solid #333;
+  width: 20%;
+  color: black;
+  min-width: 200px;
+  max-height: 100vh;
+  overflow-y: auto;
+  margin: 20px 0;
+  padding: 15px;
+  position: absolute;
+  left: 55px;
+  top: 717px;
+}
+.schedule-table {
+  border-collapse: collapse;
+  width: 50%;
+  margin-top: 5px;
+  color: black;
+  margin-left: 400px;
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+}
+#saveScheduleButton {
+  z-index: 1;
+  position: absolute;
+  margin-top: 3%;
+  margin-left: -171px;
+  padding: 15px;
+  border-radius: 10%;
+  background-color: rgb(191, 191, 199);
+  font-size: 15pt;
+}
+#restrictedShowButton {
+  margin-top: 3%;
+  position: absolute;
+  z-index: 1;
+  padding: 15px;
+  border-radius: 1px;
+  margin-left: 2px;
+  background-color: lightgrey;
+  font-size: 13pt;
+}
+#FireTom {
+  background-color: rgb(216, 15, 15);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: solid;
+  border-color: black;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0;
+  margin-top: -650px;
+  margin-left: 1000px;
+}
+}
