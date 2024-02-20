@@ -6,14 +6,7 @@ const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sat
 function SaveScheduleButton({ schedule, startDate }) {
 
     const getWeekDates = (startDate) => {
-        return daysOfWeek.map((day, index) => format(addDays(new Date(startDate), index), 'EEEE MM/dd/yyyy'));
-    };
-
-    const downloadSchedule = (formattedStartDate) => {
-        // Updated to include the startDate in the request
-        const downloadUrl = `http://localhost:3001/download-schedule?date=${formattedStartDate}`;
-    
-        window.location.href = downloadUrl; // Directly navigate to trigger the download
+        return daysOfWeek.map((day, index) => format(addDays(startDate, index), 'EEEE MM/dd/yyyy'));
     };
 
     const postSchedule = (scheduleData) => {
@@ -23,6 +16,7 @@ function SaveScheduleButton({ schedule, startDate }) {
             scheduleData: schedule
         };
 
+        // This function now primarily focuses on posting the schedule
         fetch('http://localhost:3001/save-schedule', {
             method: 'POST',
             headers: {
@@ -33,8 +27,8 @@ function SaveScheduleButton({ schedule, startDate }) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const formattedStartDate = format(new Date(startDate), 'yyyy-MM-dd');
-                downloadSchedule(formattedStartDate); // Pass the formatted date to downloadSchedule
+                // Schedule saved successfully, proceed to download
+                downloadSchedule();
             } else {
                 throw new Error('Schedule was not saved successfully.');
             }
@@ -44,12 +38,24 @@ function SaveScheduleButton({ schedule, startDate }) {
         });
     };
 
+    const downloadSchedule = () => {
+        // Directly using the public URL for the schedule file
+        const scheduleUrl = `https://thitwstaffinfo.s3.ca-central-1.amazonaws.com/schedule.xlsx`;
+
+        const a = document.createElement('a');
+        a.href = scheduleUrl;
+        a.download = `Schedule_${format(startDate, 'yyyy-MM-dd')}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    };
+
     const saveSchedule = () => {
         postSchedule(schedule); // Trigger posting the schedule
     };
 
     return (
-        <button id="saveScheduleButton"  onClick={saveSchedule}>Save Schedule</button>
+        <button id="saveScheduleButton" onClick={saveSchedule}>Save Schedule</button>
     );
 }
 

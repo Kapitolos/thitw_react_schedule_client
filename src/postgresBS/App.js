@@ -4,7 +4,7 @@ import StaffList from './stafflist';
 import CalendarComponent from './calendarcomponent';
 import Schedule from './Schedule';  // Import the Schedule component
 import StaffShiftSummary from './StaffShiftSummary';  // Adjust path accordingly
-import FireTom from './firetom';
+
 
 function App() {
     return (
@@ -12,7 +12,6 @@ function App() {
             <header className="App-header">
                 <StaffList />
                 <Schedule />
-                <FireTom />
             </header>
         </div>
     );
