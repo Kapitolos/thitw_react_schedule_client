@@ -6,7 +6,7 @@ function RestrictedSlotsEditor() {
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     useEffect(() => {
-        axios.get('http://localhost:3001/restricted-slots')
+        axios.get(`${process.env.REACT_APP_API_URL}/restricted-slots`)
             .then(response => {
                 setLocalRestrictedSlots(response.data);
             })
@@ -25,7 +25,7 @@ function RestrictedSlotsEditor() {
         setLocalRestrictedSlots(updatedSlots);
 
         // Send update to server immediately
-        axios.post('http://localhost:3001/restricted-slots', updatedSlots)
+        axios.post(`${process.env.REACT_APP_API_URL}/restricted-slots`, updatedSlots)
             .then(response => {
                 if (response.data.success) {
                     console.log('Restricted slots updated successfully!');

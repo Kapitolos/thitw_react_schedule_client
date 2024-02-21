@@ -12,7 +12,7 @@ function StaffList() {
     const [newStaffName, setNewStaffName] = useState(''); // State to capture the new staff member's name
 
     useEffect(() => {
-        axios.get('http://localhost:3001/staff-availability')
+        axios.get(`${process.env.REACT_APP_API_URL}/staff-availability`)
             .then(response => {
                 setStaffData(response.data);
             })
@@ -27,7 +27,7 @@ const handleMaxShiftsChange = (staffName, value) => {
     updatedData[staffName].max_shifts = parseInt(value, 10);
     setStaffData(updatedData);
     
-    axios.post('http://localhost:3001/update-max-shifts', { staffName, maxShifts: value })
+    axios.post(`${process.env.REACT_APP_API_URL}/update-max-shifts`, { staffName, maxShifts: value })
         .then(response => {
             console.log('Successfully updated max shifts:', response.data);
         })
@@ -53,7 +53,7 @@ const handleDateChange = (date, name) => {
     
         setStaffData(updatedData);
     
-        axios.post('http://localhost:3001/update-booked-dates', updatedData)
+        axios.post(`${process.env.REACT_APP_API_URL}/update-booked-dates`, updatedData)
             .then(response => {
                 console.log('Successfully updated booked dates:', response.data);
             })
@@ -122,7 +122,7 @@ const handleDateChange = (date, name) => {
             },
         };
 
-        axios.post('http://localhost:3001/add-staff', newStaffData)
+        axios.post(`${process.env.REACT_APP_API_URL}/add-staff`, newStaffData)
         .then(response => {
             if (response.data.success) {
                 setStaffData({ ...staffData, ...newStaffData });
@@ -146,7 +146,7 @@ const handleDateChange = (date, name) => {
         }));
     
         // Send updated data to server
-        axios.post('http://localhost:3001/update-staff-availability', {
+        axios.post(`${process.env.REACT_APP_API_URL}/update-staff-availability`, {
             staffName: staffName,
             updatedData: updatedData
         })
@@ -164,7 +164,7 @@ const handleDateChange = (date, name) => {
 
     const handleRemoveStaff = (staffName) => {
         // Send a request to the server to remove the staff member
-        axios.post('http://localhost:3001/remove-staff', { staffName })
+        axios.post(`${process.env.REACT_APP_API_URL}/remove-staff`, { staffName })
             .then(response => {
                 if (response.data.success) {
                     console.log(`Successfully removed staff member: ${staffName}`);

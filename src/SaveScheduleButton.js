@@ -11,7 +11,7 @@ function SaveScheduleButton({ schedule, startDate }) {
 
     const downloadSchedule = (formattedStartDate) => {
         // Updated to include the startDate in the request
-        const downloadUrl = `http://localhost:3001/download-schedule?date=${formattedStartDate}`;
+        const downloadUrl = `${process.env.REACT_APP_API_URL}/download-schedule?date=${formattedStartDate}`;
     
         window.location.href = downloadUrl; // Directly navigate to trigger the download
     };
@@ -23,7 +23,7 @@ function SaveScheduleButton({ schedule, startDate }) {
             scheduleData: schedule
         };
 
-        fetch('http://localhost:3001/save-schedule', {
+        fetch(`${process.env.REACT_APP_API_URL}/save-schedule`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -83,7 +83,7 @@ const shouldHighlight = (staffName) => selectedStaff === staffName;
     };
 
     useEffect(() => {
-        fetch('http://localhost:3001/staff-availability')
+        fetch(`${process.env.REACT_APP_API_URL}/staff-availability`)
             .then(response => response.json())
             .then(data => {
                 setStaffData(data);
@@ -93,7 +93,7 @@ const shouldHighlight = (staffName) => selectedStaff === staffName;
                 console.error("Error fetching staff availability data:", error);
             });
 
-        axios.get('http://localhost:3001/restricted-slots')
+        axios.get(`${process.env.REACT_APP_API_URL}/restricted-slots`)
             .then(response => {
                 // Set the restricted slots state with the fetched data
                 // Adjust your state structure accordingly
@@ -106,7 +106,7 @@ const shouldHighlight = (staffName) => selectedStaff === staffName;
     
     // Function to update restricted slots on the server
 const updateRestrictedSlots = (updatedSlots) => {
-    axios.post('http://localhost:3001/restricted-slots', updatedSlots)
+    axios.post(`${process.env.REACT_APP_API_URL}/restricted-slots`, updatedSlots)
       .then(response => {
         if (response.data.success) {
           setRestrictedSlots(updatedSlots); // Update state with new slots
