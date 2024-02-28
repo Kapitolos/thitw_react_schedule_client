@@ -5,7 +5,7 @@ function StaffEditor({ staffData: initialStaffData, staffName, onUpdateStaffData
     const [selectedVenue, setSelectedVenue] = useState('Bothams');
     const [selectedTime, setSelectedTime] = useState('evening');
     const venues = ['Bothams', 'Hole'];
-    const times = ['lunch', 'evening'];
+    const times = ['lunch', 'evening','Runner 1', 'Runner 2', 'Runner 3'];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     const isAvailable = (day) => {

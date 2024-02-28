@@ -157,11 +157,12 @@ button:hover {
 #saveScheduleButton {
 z-index: 1;
 position: absolute;
-margin-top: -40%;
+margin-top: -48%;
+margin-left: -5%;
 padding: 15px;
 border-radius: 10%;
 background-color: rgb(191, 191, 199);
-font-size: 15pt;
+font-size: 12pt;
 }
 
 #maxshiftstext{
@@ -211,14 +212,14 @@ font-size: 15pt;
 }
 
 #restrictedShowButton {
-  margin-top: -40%;
+  margin-top: -48%;
   position: absolute;
   z-index: 1;
   padding: 15px;
   border-radius: 12px;
-  margin-left: 180px;
+  margin-left: 120px;
   background-color: lightgrey;
-  font-size: 15pt;
+  font-size: 11pt;
 }
 
 #addStaffButton {
@@ -259,8 +260,9 @@ color: white;
   align-items: center;
   text-align: center;
   padding: 0; /* Reset padding */
-  margin-top: -650px;
-  margin-left: 1000px;
+  margin-top: -750px;
+  margin-left: 1100px;
+  z-index: 100;
 }
 
 #FireTom:disabled {
@@ -315,7 +317,7 @@ color: white;
   padding: 33px;
   position: absolute;
   left: 48px;
-  top: 717px;
+  top: 800px;
 }
 #stafflist button {
   padding: 5px;
@@ -443,7 +445,7 @@ color: white;
   padding: 33px;
   position: absolute;
   left: 48px;
-  top: 717px;
+  top: 800px;
 }
 #stafflist button {
   padding: 5px;
@@ -570,7 +572,7 @@ color: white;
   padding: 33px;
   position: absolute;
   left: 47px;
-  top: 711px;
+  top: 800px;
 }
 #stafflist button {
   padding: 5px;
@@ -699,7 +701,7 @@ color: white;
   padding: 33px;
   position: absolute;
   left: 48px;
-  top: 717px;
+  top: 850px;
 }
 #stafflist button {
   padding: 5px;
