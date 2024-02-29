@@ -203,45 +203,45 @@ function isRestricted(slot, day, restrictedSlots) {
     return true;  // For non-restricted slots
 };
 
-const processPreferences = (currentSchedule, staffData, scheduled) => {
-    console.log('Processing preferences...');
+// const processPreferences = (currentSchedule, staffData, scheduled) => {
+//     console.log('Processing preferences...');
 
-    Object.entries(staffData).forEach(([staffName, staffDetails]) => {
-        const staffPreferences = staffDetails.preferences;
-        if (!staffPreferences || !Array.isArray(staffPreferences)) {
-            console.log(`Skipping ${staffName}: No valid preferences found.`);
-            return;
-        }
+//     Object.entries(staffData).forEach(([staffName, staffDetails]) => {
+//         const staffPreferences = staffDetails.preferences;
+//         if (!staffPreferences || !Array.isArray(staffPreferences)) {
+//             console.log(`Skipping ${staffName}: No valid preferences found.`);
+//             return;
+//         }
 
-        staffPreferences.forEach(preference => {
-            const { venue, shift, day } = preference;
-            console.log(`${staffName} has a preference for ${venue} on ${day} during ${shift}`);
+//         staffPreferences.forEach(preference => {
+//             const { venue, shift, day } = preference;
+//             console.log(`${staffName} has a preference for ${venue} on ${day} during ${shift}`);
 
-            // Ensure the combination of shift and venue exists in the currentSchedule, initialize if necessary
-            const shiftVenueKey = `${shift}_${venue}`; // Create a unique key for shift and venue combination
-            if (!currentSchedule[shiftVenueKey]) {
-                currentSchedule[shiftVenueKey] = initializeDays();
-            }
+//             // Ensure the combination of shift and venue exists in the currentSchedule, initialize if necessary
+//             const shiftVenueKey = `${shift}_${venue}`; // Create a unique key for shift and venue combination
+//             if (!currentSchedule[shiftVenueKey]) {
+//                 currentSchedule[shiftVenueKey] = initializeDays();
+//             }
 
-            // Now you can safely check and assign shifts considering venue
-            if (currentSchedule[shiftVenueKey][day] === "") {
-                // Check if the staff is available and not booked off, then assign the shift
-                if (isStaffAvailable(staffName, venue, shift, day, staffDetails) && !isBookedOff(staffName, day, staffDetails)) {
-                    console.log(`Assigning ${staffName} to preferred slot at ${venue} for ${shift} on ${day}.`);
-                    currentSchedule[shiftVenueKey][day] = staffName;
-                    if (!scheduled[staffName]) {
-                        scheduled[staffName] = [];
-                    }
-                    scheduled[staffName].push(day);
-                } else {
-                    console.log(`Skipping preference for ${staffName}: Not available or booked off on ${day}.`);
-                }
-            } else {
-                console.log(`Skipping preference for ${staffName}: Slot at ${venue} for ${shift} on ${day} is already filled.`);
-            }
-        });
-    });
-};
+//             // Now you can safely check and assign shifts considering venue
+//             if (currentSchedule[shiftVenueKey][day] === "") {
+//                 // Check if the staff is available and not booked off, then assign the shift
+//                 if (isStaffAvailable(staffName, venue, shift, day, staffDetails) && !isBookedOff(staffName, day, staffDetails)) {
+//                     console.log(`Assigning ${staffName} to preferred slot at ${venue} for ${shift} on ${day}.`);
+//                     currentSchedule[shiftVenueKey][day] = staffName;
+//                     if (!scheduled[staffName]) {
+//                         scheduled[staffName] = [];
+//                     }
+//                     scheduled[staffName].push(day);
+//                 } else {
+//                     console.log(`Skipping preference for ${staffName}: Not available or booked off on ${day}.`);
+//                 }
+//             } else {
+//                 console.log(`Skipping preference for ${staffName}: Slot at ${venue} for ${shift} on ${day} is already filled.`);
+//             }
+//         });
+//     });
+// };
 
 function initializeDays() {
     // Initialize days of the week with empty strings or appropriate structure
@@ -280,16 +280,13 @@ function isBookedOff(staffName, day, staffDetails) {
     const buildSchedule = () => {
         // console.log("TOP OF BUILD", JSON.stringify(currentSchedule, null, 2));
 
-        // let currentSchedule = {};
+        let currentSchedule = {};
         // console.log("After Null", JSON.stringify(currentSchedule, null, 2));
         let attempts = 10; // Counter to limit the number of attempts
         const MAX_ATTEMPTS = 500;  // You can adjust this as needed
-        // let scheduled = {};
-        // First, process staff preferences to give them priority
-
+    
         do {
             let scheduled = {};
-            processPreferences(currentSchedule, staffData, scheduled);
     
         // Initialize all slot-day combinations with an empty string
         for (let slot of slots) {
@@ -298,8 +295,10 @@ function isBookedOff(staffName, day, staffDetails) {
                 currentSchedule[slot][day] = "";
             }
         }
+    
+        // // First, process staff preferences to give them priority
+        // processPreferences(currentSchedule, staffData, scheduled);
 
-  
 
     
     
