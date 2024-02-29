@@ -37,7 +37,7 @@ button {
 
 button:hover {
   color: rgb(117, 117, 231);
-  background-color: rgb(140, 195, 140);
+  background-color: rgb(255, 247, 17);
 }
 
 #stafflist h2 {
@@ -58,7 +58,7 @@ button:hover {
 
 #stafflist button {
   padding: 5px;
-  width: 25%;
+  width: 48%;
   font-family: 'Times New Roman', Times, serif;
 }
 
@@ -89,6 +89,48 @@ button:hover {
   color: rgb(238, 238, 161);
 }
 
+.day-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px; /* Adds some space between each day */
+}
+
+.availability-toggle, .preference-toggle {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.availability-toggle {
+  flex-grow: 1; /* Makes the availability toggle take up most of the space */
+  margin-right: 10px; /* Adds some space between the toggle and the button */
+}
+
+.available {
+  background-color: #90ee90; /* Light green */
+}
+
+.not-available {
+  background-color: #ff0400; /* Light red */
+}
+
+.preference-toggle {
+  padding: 5px 10px !important; /* Smaller padding for the preference button */
+  font-size: 12pt !important;
+}
+
+.is-preference {
+  background-color: #f3a30e; /* Light blue to indicate preference */
+  color: white;
+}
+
+
+.day-container {
+  display: flex;
+  align-items: center;
+}
 
 
 .booked-off {
@@ -232,8 +274,8 @@ font-size: 12pt;
    width: 75% !important;
    padding: 10px !important;
    height: 10% !important;
-   margin-top: 130%;
-   margin-left: -85%;
+   margin-top: 155%;
+   margin-left: -120% !important;
    margin-bottom: 10px;
 font-size: large;
 background-color: black;

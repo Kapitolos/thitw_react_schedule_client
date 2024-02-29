@@ -7,25 +7,35 @@ function StaffEditor({ staffData: initialStaffData, staffName, onUpdateStaffData
     const venues = ['Bothams', 'Hole'];
     const times = ['lunch', 'evening','Runner 1', 'Runner 2', 'Runner 3'];
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const [preferences, setPreferences] = useState(initialStaffData.preferences || []);
+
 
     const isAvailable = (day) => {
         return initialStaffData[selectedVenue]?.[selectedTime]?.includes(day);
     };
 
-    const updateAvailability = (day) => {
-        // Create a deep copy of the initial data
-        const staffDataCopy = JSON.parse(JSON.stringify(initialStaffData));
+    const isPreference = (day) => initialStaffData.preferences?.some(pref => pref.venue === selectedVenue && pref.shift === selectedTime && pref.day === day);
 
+
+    const updateAvailability = (day) => {
+        const staffDataCopy = JSON.parse(JSON.stringify(initialStaffData));
         if (isAvailable(day)) {
             const updatedDays = staffDataCopy[selectedVenue][selectedTime].filter(d => d !== day);
             staffDataCopy[selectedVenue][selectedTime] = updatedDays;
         } else {
-            staffDataCopy[selectedVenue][selectedTime] = [
-                ...(staffDataCopy[selectedVenue][selectedTime] || []),
-                day
-            ];
+            staffDataCopy[selectedVenue][selectedTime] = [...(staffDataCopy[selectedVenue][selectedTime] || []), day];
         }
+        onUpdateStaffData(staffName, staffDataCopy);
+    };
 
+    const togglePreference = (day) => {
+        const staffDataCopy = JSON.parse(JSON.stringify(initialStaffData));
+        if (!staffDataCopy.preferences) staffDataCopy.preferences = [];
+        if (isPreference(day)) {
+            staffDataCopy.preferences = staffDataCopy.preferences.filter(pref => !(pref.venue === selectedVenue && pref.shift === selectedTime && pref.day === day));
+        } else {
+            staffDataCopy.preferences.push({ venue: selectedVenue, shift: selectedTime, day });
+        }
         onUpdateStaffData(staffName, staffDataCopy);
     };
 
@@ -66,12 +76,19 @@ function StaffEditor({ staffData: initialStaffData, staffName, onUpdateStaffData
             </div>
             <div className="days-list">
                 {daysOfWeek.map(day => (
-                    <div 
-                        key={day} 
-                        className={`day-item ${isAvailable(day) ? 'available' : 'not-available'}`}
-                        onClick={() => updateAvailability(day)}
-                    >
-                        {day}
+                    <div key={day} className="day-item">
+                        <div
+                            className={`availability-toggle ${isAvailable(day) ? 'available' : 'not-available'}`}
+                            onClick={() => updateAvailability(day)}
+                        >
+                            {day}
+                        </div>
+                        <button
+                            className={`preference-toggle ${isPreference(day) ? 'is-preference' : ''}`}
+                            onClick={() => togglePreference(day)}
+                        >
+                            preference
+                        </button>
                     </div>
                 ))}
             </div>
@@ -83,4 +100,3 @@ function StaffEditor({ staffData: initialStaffData, staffName, onUpdateStaffData
 }
 
 export default StaffEditor;
-

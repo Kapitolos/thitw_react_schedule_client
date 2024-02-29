@@ -138,29 +138,31 @@ const handleDateChange = (date, name) => {
 };
 
 
-    const handleUpdateStaffData = (staffName, updatedData) => {
-        // Update local state
-        setStaffData(prevData => ({
-            ...prevData,
-            [staffName]: updatedData
-        }));
+const handleUpdateStaffData = (staffName, updatedData) => {
+    // Update local state to include the updated staff data
+    setStaffData(prevData => ({
+        ...prevData,
+        [staffName]: updatedData // Assuming updatedData includes preferences
+    }));
     
-        // Send updated data to server
-        axios.post(`${process.env.REACT_APP_API_URL}/update-staff-availability`, {
-            staffName: staffName,
-            updatedData: updatedData
-        })
-        .then(response => {
-            if (response.data.success) {
-                console.log('Successfully updated staff availability on the server');
-            } else {
-                console.error('Failed to update staff availability:', response.data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error updating staff availability:', error);
-        });
-    };
+    // Send updated data to server, including preferences within updatedData
+    axios.post(`${process.env.REACT_APP_API_URL}/update-staff-availability`, {
+        staffName: staffName,
+        updatedData: updatedData // Ensure this includes preferences
+    })
+    .then(response => {
+        if (response.data.success) {
+            console.log('Successfully updated staff availability on the server');
+            // You may also want to update UI or confirm to the user that the update was successful
+        } else {
+            console.error('Failed to update staff availability:', response.data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating staff availability:', error);
+    });
+};
+
 
     const handleRemoveStaff = (staffName) => {
         // Send a request to the server to remove the staff member
