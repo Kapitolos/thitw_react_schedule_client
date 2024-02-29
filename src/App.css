@@ -109,7 +109,7 @@ button:hover {
 }
 
 .available {
-  background-color: #90ee90; /* Light green */
+  background-color: green; /* Light green */
 }
 
 .not-available {
@@ -146,12 +146,14 @@ button:hover {
 #staffshiftsummary {
   width: 50%;
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Creates 5 equal columns */
-  gap: 1rem; /* Adds a little space between the grid items */
-  margin-left: 45%;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0rem;
+  margin-left: 44%;
   position: absolute;
   margin-top: -15%;
-  font-size: 15pt;
+  font-size: 14pt;
+  border-style: solid;
+
 }
 
 
