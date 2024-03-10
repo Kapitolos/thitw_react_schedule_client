@@ -17,7 +17,7 @@ function SaveScheduleButton({ schedule, startDate }) {
         };
 
         // This function now primarily focuses on posting the schedule
-        fetch('http://localhost:3001/save-schedule', {
+        fetch(`${process.env.REACT_APP_API_URL}/save-schedule`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
