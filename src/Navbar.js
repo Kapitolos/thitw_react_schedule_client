@@ -7,7 +7,7 @@ import RestrictedSlotsEditor from './RestrictedSlotsEditor';
 
 const Navbar = ({ onToggleStaffList, schedule, startDate, restrictedSlots, setRestrictedSlots, staffData, setStaffData } ) => {
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
+    const [activeButton, setActiveButton] = useState(null);
 
     // Restricted Slots editor code
        // State to manage the visibility of the RestrictedSlotsEditor
@@ -136,16 +136,34 @@ const updateRestrictedSlots = (updatedSlots) => {
         postSchedule(schedule); // Trigger posting the schedule
     };
 
+        // Function to handle button click
+        const handleButtonClick = (buttonName) => {
+      // Toggle active state off if the same button is clicked again
+      if (activeButton === buttonName) {
+        setActiveButton(null);
+    } else {
+        setActiveButton(buttonName);
+    }
+
+
+            // Additional logic based on the button clicked
+            if (buttonName === 'toggleStaffList') {
+                onToggleStaffList();
+            } else if (buttonName === 'saveSchedule') {
+                saveSchedule();
+            } else if (buttonName === 'toggleRestrictedSlotsEditor') {
+                toggleRestrictedSlotsEditor();
+            }
+        };
+
 
     return (
         <div className="navbar">
-            <button onClick={onToggleStaffList}>Toggle Staff List</button>
-            <button onClick={saveSchedule}>Save Schedule</button>
-                       {/* Toggle Button */}
-           <button onClick={toggleRestrictedSlotsEditor}>
-            
-                {showRestrictedSlotsEditor ? 'Hide Venue Days' : 'Show Venue Days'}
-            </button>
+        <button className={`navbarButton ${activeButton === 'toggleStaffList' ? 'active' : ''}`} onClick={() => handleButtonClick('toggleStaffList')}>Toggle Staff List</button>
+        <button className={`navbarButton ${activeButton === 'saveSchedule' ? 'active' : ''}`} onClick={() => handleButtonClick('saveSchedule')}>Save Schedule</button>
+        <button className={`navbarButton ${activeButton === 'toggleRestrictedSlotsEditor' ? 'active' : ''}`} onClick={() => handleButtonClick('toggleRestrictedSlotsEditor')}>
+            {showRestrictedSlotsEditor ? 'Hide Venue Days' : 'Show Venue Days'}
+        </button>
 
             {/* Conditionally render the RestrictedSlotsEditor */}
             {showRestrictedSlotsEditor && (

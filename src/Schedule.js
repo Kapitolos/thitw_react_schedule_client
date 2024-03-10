@@ -490,6 +490,7 @@ for (let slot of slots) {
         return (
             <div>
                 <div id="datepicker">
+                    
                     <DatePicker 
                         selected={startDate}
                         onChange={handleDateChange}
