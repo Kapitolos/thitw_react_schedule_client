@@ -5,14 +5,14 @@ import RestrictedSlotsEditor from './RestrictedSlotsEditor';
 
 
 
-const Navbar = ({ onToggleStaffList, onEditRestrictedSlots, schedule, startDate, restrictedSlots, setRestrictedSlots } ) => {
+const Navbar = ({ onToggleStaffList, schedule, startDate, restrictedSlots, setRestrictedSlots, staffData, setStaffData } ) => {
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 
     // Restricted Slots editor code
        // State to manage the visibility of the RestrictedSlotsEditor
        const [showRestrictedSlotsEditor, setShowRestrictedSlotsEditor] = useState(false);
-
+   
        // Toggle function
        const toggleRestrictedSlotsEditor = () => {
            setShowRestrictedSlotsEditor(prevState => !prevState);

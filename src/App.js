@@ -12,7 +12,7 @@ function App() {
     const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
         // At the beginning of the Schedule component, add a new state for restrictedSlots
 const [restrictedSlots, setRestrictedSlots] = useState({});
-
+const [staffData, setStaffData] = useState({});
 
 
 
@@ -28,6 +28,8 @@ const [restrictedSlots, setRestrictedSlots] = useState({});
               onToggleStaffList={toggleStaffList}
               restrictedSlots={restrictedSlots}
               setRestrictedSlots={setRestrictedSlots}
+              staffData={staffData}
+              setStaffData={setStaffData}
 
             />
             <header className="App-header">
@@ -37,6 +39,8 @@ const [restrictedSlots, setRestrictedSlots] = useState({});
                 setCurrentSchedule={setCurrentSchedule}
                 startDate={startDate}
                 setStartDate={setStartDate}
+                staffData={staffData}
+                setStaffData={setStaffData}
                 />
                 <FireTom />
             </header>

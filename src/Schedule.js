@@ -22,9 +22,9 @@ const reorder = (schedule, source, destination) => {
   };
 
 
-function Schedule({ currentSchedule, setCurrentSchedule, startDate, setStartDate }) {
+function Schedule({ currentSchedule, setCurrentSchedule, startDate, setStartDate, staffData, setStaffData }) {
     const [selectedStaff, setSelectedStaff] = useState(null);
-    const [staffData, setStaffData] = useState({});
+    // const [staffData, setStaffData] = useState({});
     // const [currentSchedule, setCurrentSchedule] = useState({});
     // Adjusting startOfWeek to make Monday the first day
     // const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
