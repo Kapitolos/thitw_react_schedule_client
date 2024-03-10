@@ -393,6 +393,10 @@ color: white;
   margin-bottom: 110px;
   width: 53%;
 }
+.staff-calendar {
+  margin-top: 13%;
+  margin-left: 5%;
+}
 
 .staff-editor {
   display: flex;
@@ -401,7 +405,7 @@ color: white;
 #stafflist {
   border: 1px solid #333;
   width: 32%;
-  color: black;
+  color: white;
   min-width: 251px;
   max-height: 103vh;
   overflow-y: auto;
@@ -543,7 +547,10 @@ color: white;
   margin-bottom: 110px;
   width: 53%;
 }
-
+.staff-calendar {
+  margin-top: 13%;
+  margin-left: 5%;
+}
 .staff-editor {
   display: flex;
   margin-left: -30px;
@@ -551,7 +558,7 @@ color: white;
 #stafflist {
   border: 1px solid #333;
   width: 79%;
-  color: black;
+  color: white;
   min-width: 251px;
   max-height: 103vh;
   overflow-y: auto;
@@ -711,7 +718,7 @@ color: white;
 #stafflist {
   border: 1px solid #333;
   width: 79%;
-  color: black;
+  color: white;
   min-width: 251px;
   max-height: 103vh;
   overflow-y: auto;
@@ -825,6 +832,10 @@ color: white;
     margin-bottom: 110px;
     width: 53%;
 }
+.staff-calendar {
+  margin-top: 13%;
+  margin-left: 5%;
+}
 }
 
 
@@ -868,7 +879,10 @@ color: white;
   margin-bottom: 110px;
   width: 53%;
 }
-
+.staff-calendar {
+  margin-top: 2%;
+  margin-left: 5%;
+}
 .staff-editor {
   display: flex;
   margin-left: -30px;
@@ -876,7 +890,7 @@ color: white;
 #stafflist {
   border: 1px solid #333;
   width: 79%;
-  color: black;
+  color: white;
   min-width: 251px;
   max-height: 103vh;
   overflow-y: auto;
