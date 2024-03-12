@@ -511,13 +511,27 @@ color: white;
   color: white;
   font-size: 16px;
   cursor: pointer;
-  display: none;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 0;
-  margin-top: -650px;
-  margin-left: 1000px;
+  margin-left: -39px;
+  margin-top: 422px;
+  margin-left: 8px;
+  padding: 62px;
+  margin-bottom: 37px;
+}
+
+.gif-container img {
+  position: absolute; /* Positions the GIF absolutely relative to its positioned ancestor */
+  z-index: 1000; /* High z-index to ensure it overlaps other elements */
+  top: 150%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Centers the GIF */
+  border-style: solid;
+  border-width: 10px;
+  border-color: black;
+  width:90%;
 }
   
 .react-datepicker {
@@ -664,13 +678,26 @@ color: white;
   color: white;
   font-size: 16px;
   cursor: pointer;
-  display: none;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 0;
-  margin-top: -650px;
-  margin-left: 1000px;
+  margin-left: -39px;
+  margin-top: 422px;
+  margin-left: 8px;
+  padding: 62px;
+  margin-bottom: 37px;
+}
+.gif-container img {
+  position: absolute; /* Positions the GIF absolutely relative to its positioned ancestor */
+  z-index: 1000; /* High z-index to ensure it overlaps other elements */
+  top: 150%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Centers the GIF */
+  border-style: solid;
+  border-width: 10px;
+  border-color: black;
+  width:90%;
 }
   
 .react-datepicker {
@@ -824,13 +851,26 @@ color: white;
   color: white;
   font-size: 16px;
   cursor: pointer;
-  display: none;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 0;
-  margin-top: -650px;
-  margin-left: 1000px;
+  margin-left: -39px;
+  margin-top: 422px;
+  margin-left: 8px;
+  padding: 62px;
+  margin-bottom: 37px;
+}
+.gif-container img {
+  position: absolute; /* Positions the GIF absolutely relative to its positioned ancestor */
+  z-index: 1000; /* High z-index to ensure it overlaps other elements */
+  top: 150%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Centers the GIF */
+  border-style: solid;
+  border-width: 10px;
+  border-color: black;
+  width:90%;
 }
 .react-datepicker {
   margin-top: 1%;
@@ -996,13 +1036,26 @@ color: white;
   color: white;
   font-size: 16px;
   cursor: pointer;
-  display: none;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 0;
-  margin-top: -650px;
-  margin-left: 1000px;
+  margin-left: -39px;
+  margin-top: 422px;
+  margin-left: 8px;
+  padding: 62px;
+  margin-bottom: 37px;
+}
+.gif-container img {
+  position: absolute; /* Positions the GIF absolutely relative to its positioned ancestor */
+  z-index: 1000; /* High z-index to ensure it overlaps other elements */
+  top: 150%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Centers the GIF */
+  border-style: solid;
+  border-width: 10px;
+  border-color: black;
+  width:90%;
 }
   
   .react-datepicker {
