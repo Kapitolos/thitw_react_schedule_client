@@ -24,11 +24,6 @@ const reorder = (schedule, source, destination) => {
 
 function Schedule({ currentSchedule, setCurrentSchedule, startDate, setStartDate, staffData, setStaffData }) {
     const [selectedStaff, setSelectedStaff] = useState(null);
-    // const [staffData, setStaffData] = useState({});
-    // const [currentSchedule, setCurrentSchedule] = useState({});
-    // Adjusting startOfWeek to make Monday the first day
-    // const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 1 }));
-
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const slots = ["Lunch1", "Lunch2","Lunch3", "Bothams1", "Bothams2", "Bothams3", "Bothams4", "Hole1", "Hole2","Runner 1", "Runner 2", "Runner 3"];
 
@@ -116,17 +111,37 @@ const updateRestrictedSlots = (updatedSlots) => {
         console.error("Error updating restricted slots:", error);
       });
   };
-    
 
-  const isStaffAvailable = (staff, venue, shift, day) => {
-    // Check if staff, venue, and time data exist
-    if (!staffData[staff] || !staffData[staff][venue] || !staffData[staff][venue][shift]) {
-        return false; // Not available if any data is missing
+const isStaffAvailable = (staff, venue, shift, day) => {
+    // Initial check for staff data existence
+    if (!staffData[staff]) {
+        console.log(`Staff data for ${staff} does not exist.`);
+        return false;
+    }
+    
+    // Check for venue existence in staff data
+    if (!staffData[staff][venue]) {
+        console.log(`Venue data for ${staff} at ${venue} does not exist.`);
+        return false;
+    }
+    
+    // Check for shift existence in staff data at the venue
+    if (!staffData[staff][venue][shift]) {
+        console.log(`Shift data for ${staff} at ${venue} during ${shift} does not exist.`);
+        return false;
     }
 
     // Check if the staff is available on the specified day
+    const available = staffData[staff][venue][shift].includes(day);
+    if (!available) {
+        // console.log(`Staff ${staff} is not available for ${venue} during ${shift} on ${day}.`);
+    } else {
+        // console.log(`Staff ${staff} is available for ${venue} during ${shift} on ${day}.`);
+    }
+    
     return staffData[staff][venue][shift].includes(day);
 };
+
 
 
 
@@ -159,8 +174,10 @@ const getNextDayOfWeek = (dayName, referenceDate = new Date()) => {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
+        // console.log("ARRAY " + array);
         return array;
     }
+  
 
     const isScheduleFull = (schedule, restrictedSlots) => {
         for (let slot in schedule) {
@@ -170,22 +187,22 @@ const getNextDayOfWeek = (dayName, referenceDate = new Date()) => {
                 
                 // If the slot for this day is not filled, but the day is available for scheduling, then the schedule is not full
                 if (!schedule[slot][day] && isAvailableForScheduling) {
-                    // console.log(`Slot ${slot} on ${day} is empty but available for scheduling.`);
+                    console.log(`Slot ${slot} on ${day} is empty but available for scheduling.`);
                     return false;
                 }
             }
         }
-        console.log("Schedule is considered full.");
+        // console.log("Schedule is considered full.");
         return true;
     };
 
     useEffect(() => {
         if (isScheduleFull(currentSchedule, restrictedSlots)) {
-            console.log('Schedule is full');
+            // console.log('Schedule is full');
         } else {
             const updatedSchedule = BenFill({...currentSchedule}, slots, daysOfWeek); // Clone currentSchedule to ensure immutability
             setCurrentSchedule(updatedSchedule); // Set the updated schedule to trigger a re-render
-            console.log('Schedule is not full, BEN applied');
+            // console.log('Schedule is not full, BEN applied');
         }
     }, [currentSchedule]); // React will re-run this effect if currentSchedule changes
     
@@ -206,67 +223,42 @@ function isRestricted(slot, day, restrictedSlots) {
     return true;  // For non-restricted slots
 };
 
-// const assignStaffToPreferredVenueSlot = (currentSchedule, staffName, staffDetails, slots) => {
-//     console.log("Assigning preferred slots for:", staffName);
-//     const preferences = staffDetails.preferences;
-
-//     // Log preferences for debugging
-//     console.log("Preferences:", preferences);
-
-//     preferences.forEach(preference => {
-//         const { venue, shift, day } = preference;
-//         console.log(`Processing preference: Venue=${venue}, Shift=${shift}, Day=${day}`);
-
-//         // Ensure slots are correctly filtered based on venue and shift
-//         const matchingSlots = slots.filter(slot => slot.includes(venue) && slot.toLowerCase().includes(shift));
-//         console.log("Matching slots for preference:", matchingSlots);
-        
-//         // Attempt to assign the staff to the first available matching slot
-//         for (const slot of matchingSlots) {
-//             // Ensure the slot and day are initialized in the schedule
-//             if (!currentSchedule[slot]) currentSchedule[slot] = {};
-//             if (currentSchedule[slot][day] === undefined) currentSchedule[slot][day] = "";
-
-//             // Check if the slot is already filled
-//             if (currentSchedule[slot][day] === "") {
-//                 // Check availability and booked off status
-//                 const isAvailable = isStaffAvailable(staffName, venue, shift, day, staffDetails);
-//                 const isBookedOff = staffDetails.booked_off_dates.includes(day);
-
-//                 if (isAvailable && !isBookedOff) {
-//                     console.log(`NEW Assigning ${staffName} to ${slot} on ${day}.`);
-//                     currentSchedule[slot][day] = staffName;
-//                     break; // Stop checking other slots once assigned
-//                 }
-//             }
-//         }
-//     });
-// };
-
-// Example usage of the function
-// assignStaffToPreferredVenueSlot(currentSchedule, "John Doe", staffData["John Doe"], slots);
 
 const processPreferences = (currentSchedule, staffData, slots) => {
-    console.log('Processing preferences...');
+    // console.log('Processing preferences...');
+    // console.log("Current sched before pref push ",currentSchedule)
     let filledSlots = new Set(); // Track filled slots
 
     Object.entries(staffData).forEach(([staffName, staffDetails]) => {
         staffDetails.preferences.forEach(({ venue, shift, day }) => {
-            console.log(`${staffName} has a preference for ${venue} on ${day} during ${shift}`);
+            // console.log(`${staffName} has a preference for ${venue} on ${day} during ${shift}`);
 
-            // Filter slots to find those that match the staff's preference for the venue
-            const matchingSlots = slots.filter(slot => slot.startsWith(venue));
-            console.log("Matching Slots: ", matchingSlots);
+            // Determine the slot prefix based on the shift preference
+            let slotPrefix;
+            if (shift === 'lunch') {
+                slotPrefix = 'Lunch'; // Assuming lunch slots are prefixed with "Lunch"
+                // console.log("lunch? " + slotPrefix);
+            } else {
+                slotPrefix = venue; // For evening shifts, use the venue name as the prefix
+                // console.log("No lunch? " + slotPrefix);
+            }
+
+            // Filter slots to find those that match the staff's preference for the venue and shift
+            const matchingSlots = slots.filter(slot => slot.startsWith(slotPrefix));
+            // console.log("Matching Slots: ", matchingSlots);
 
             // Attempt to assign the staff to one of the matching slots if available
             let assigned = false;
             for (let matchingSlot of matchingSlots) {
                 // Check if slot for the day is empty and staff is available and not booked off
-                if (currentSchedule[matchingSlot][day] === "" && isStaffAvailable(staffName, venue, shift, day, staffDetails) && !isBookedOff(staffName, day, staffDetails)) {
+                const currentDayDate = addDays(startDate, daysOfWeek.indexOf(day));
+                if (currentSchedule[matchingSlot][day] === "" && isStaffAvailable(staffName, venue, shift, day) && !isStaffBookedOff(staffName, currentDayDate)) {
                     currentSchedule[matchingSlot][day] = staffName;
-                    console.log(`Assigned ${staffName} to ${matchingSlot} on ${day}`);
+                    // This is not exactly it
+                    // staffData[staffName].max_shifts += 1;
+                    // console.log(`Assigned ${staffName} to matching slot: ${matchingSlot} on ${day}`);
                     filledSlots.add(`${matchingSlot}_${day}`);
-                    console.log("FILLED");
+                    // console.log("FILLED");
                     assigned = true;
                     break; // Stop searching once a match is found and assigned
                 }
@@ -277,11 +269,12 @@ const processPreferences = (currentSchedule, staffData, slots) => {
             }
         });
     });
-    console.log("Filled slots through preferences:", filledSlots);
+    // console.log("Filled slots through preferences:", filledSlots);
+    // console.log("current sched in function: ", currentSchedule)
 
     return { filledSlots, currentSchedule };
-
 };
+
 
 
 
@@ -299,177 +292,256 @@ function initializeDays() {
     };
 }
 
-// // Helper function to initialize days for a shift
-// function initializeDays() {
-//     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-//     const dayInitialization = {};
-//     daysOfWeek.forEach(day => {
-//         dayInitialization[day] = "";
-//     });
-//     return dayInitialization;
-// }
-
-
 
 function isBookedOff(staffName, day, staffDetails) {
-    // Implement your logic to check if the staff is booked off on the given day
-    return false; // Placeholder return value
+    // Assuming `day` is in 'YYYY-MM-DD' format and `staffDetails.booked_off_dates` is an array of dates in the same format
+    const bookedOffDates = staffDetails.booked_off_dates || [];
+
+    // Check if the day is within the staff's booked-off dates
+    return bookedOffDates.includes(day);
+}
+
+// THIS IS IN USE AND NOT FINISHED AT ALL
+function validateAndCorrectMaxShifts(staffData, currentSchedule, filledSlots) {
+    Object.keys(staffData).forEach(staff => {
+        const assignedShifts = countAssignedShifts(staff, currentSchedule); // Implement this based on your schedule structure
+        const maxShifts = staffData[staff].max_shifts;
+
+        if (assignedShifts > maxShifts) {
+            // Logic to reallocate excess shifts
+        } else if (assignedShifts < maxShifts) {
+            // Logic to fill missing shifts, respecting filledSlots
+        }
+    });
+}
+
+// Assuming a simple count function based on your schedule's structure
+function countAssignedShifts(staff, schedule) {
+    let count = 0;
+    Object.keys(schedule).forEach(slot => {
+        Object.values(schedule[slot]).forEach(day => {
+            if (day === staff) count++;
+        });
+    });
+    return count;
 }
 
 
+// Initialize scheduled shifts count based on preferences
+const scheduledShiftsCount = initializeScheduledShiftsCount(staffData, currentSchedule);
+
+function initializeScheduledShiftsCount(staffData, schedule) {
+    let count = {};
+    Object.keys(staffData).forEach(staff => {
+        count[staff] = 0; // Initialize count
+    });
+
+    // Count preferenced shifts as scheduled
+    Object.values(schedule).forEach(daySlots => {
+        Object.values(daySlots).forEach(assignment => {
+            if (assignment && count.hasOwnProperty(assignment)) {
+                count[assignment]++;
+            }
+        });
+    });
+
+    return count;
+}
 
 
+// PASTE
+const buildSchedule = () => {
+    let currentSchedule = {};
+    let filledSlots = new Set(); // Initialize filled slots
+    let attempts = 10;
+    const MAX_ATTEMPTS = 100;
 
-    const buildSchedule = () => {
-        // console.log("TOP OF BUILD", JSON.stringify(currentSchedule, null, 2));
-        // console.log("Before null current "+ currentSchedule);
-        let currentSchedule = {};
-        // console.log("After Null", JSON.stringify(currentSchedule, null, 2));
-        let attempts = 10; // Counter to limit the number of attempts
-        const MAX_ATTEMPTS = 200;  // You can adjust this as needed
- 
-            
+    do {
+        const scheduled = {};
 
-        do {
-            const scheduled = {};
-    
-        // Initialize all slot-day combinations with an empty string
-        for (let slot of slots) {
+        // Initialize all slot-day combinations
+        slots.forEach(slot => {
             currentSchedule[slot] = {};
-            for (let day of daysOfWeek) {
+            daysOfWeek.forEach(day => {
                 currentSchedule[slot][day] = "";
-            }
-        }
-        console.log("Schedule initialized:", JSON.stringify(currentSchedule, null, 2));
-    
-           // // First, process staff preferences to give them priority
-        //    console.log("BEFORE PREF ", JSON.stringify(currentSchedule, null, 2));
-           processPreferences(currentSchedule, staffData, slots);
-           console.log("After PREF ", JSON.stringify(currentSchedule, null, 2));
-
-
-    
-    
-    
-    // Begin with restricted slots
-    for (let slot in restrictedSlots) {
-        for (let day of restrictedSlots[slot]) {
-            let staffMembers = shuffleArray(Object.keys(staffData)).sort((a, b) => {
-                const shiftsA = scheduled[a] ? scheduled[a].length : 0;
-                const shiftsB = scheduled[b] ? scheduled[b].length : 0;
-                const diffA = staffData[a].max_shifts - shiftsA;
-                const diffB = staffData[b].max_shifts - shiftsB;
-                return diffB - diffA; // This will prioritize staff who are farthest from their max_shifts
             });
-            
-            for (let staff of staffMembers) {
-                if (scheduled[staff] && scheduled[staff].length >= staffData[staff].max_shifts) {
-                    continue;
-                }
-                if (scheduled[staff] && scheduled[staff].includes(day)) continue;
+        });
 
-                let venue, shift;
+        // validateAndCorrectMaxShifts(staffData, currentSchedule, filledSlots);
 
-                if (slot.includes("Lunch")) {
-                    venue = "Bothams"; 
-                    shift = "lunch";
-                } else if (slot.includes("Hole")) {
-                    venue = "Hole";
-                    shift = "evening";
-                } else if (slot.includes("Bothams")) {
-                    venue = "Bothams";
-                    shift = "evening";
-                } else if (slot.includes("Runner 1")) {
-                    venue = "Bothams";
-                    shift = "Runner 1";
-                } else if (slot.includes("Runner 2")) {
-                    venue = "Bothams";
-                    shift = "Runner 2";
-                } else if (slot.includes("Runner 3")) {
-                    venue = "Bothams";
-                    shift = "Runner 3";
-                }
-                const currentDayDate = addDays(startDate, daysOfWeek.indexOf(day)); // Get the actual date for the day
-
-                if (isStaffAvailable(staff, venue, shift, day) && !isStaffBookedOff(staff, currentDayDate)) {
-                    // console.log(`${staff} is being considered for ${slot} on ${day}`);
-                    // console.log(`[RESTRICTED] ${staff} is being considered for ${slot} on ${day}`);
-                    currentSchedule[slot][day] = staff;
-                
-                    if (!scheduled[staff]) {
-                        scheduled[staff] = [];
-                    }
-                    scheduled[staff].push(day);
-                    // console.log(`${staff} is scheduled for ${slot} on ${day}`);
-                    break;
-                }
-                
-            }
+        // Process staff preferences first
+        ({ filledSlots, currentSchedule } = processPreferences(currentSchedule, staffData, slots));
+        // console.log("Filled Slots after preferences:", filledSlots);
+        // Ensure scheduled reflects preferences assignments
+Object.keys(currentSchedule).forEach(slot => {
+    daysOfWeek.forEach(day => {
+        const staffName = currentSchedule[slot][day];
+        if (staffName) {
+            scheduled[staffName] = [...(scheduled[staffName] || []), day]; // Update scheduled with preference assignments
         }
+    });
+});
+// console.log("Scheduled after preferences processed:", scheduled);
 
-    }
 
-// Continue with non-restricted slots
-for (let slot of slots.filter(s => !Object.keys(restrictedSlots).includes(s))) {
-    for (let day of daysOfWeek) {
-        let staffMembers = shuffleArray(Object.keys(staffData));
+       // Process restricted slots
+for (let slot in restrictedSlots) {
+    restrictedSlots[slot].forEach(day => {
+        // console.log("All staff before filtering:", Object.keys(staffData));
+        
+        // Filter staff members based on max shifts and whether they're already scheduled for the day
+    
+        let staffMembers = shuffleArray(Object.keys(staffData).filter(staff => {
+            const hasNotReachedMaxShifts = !scheduled[staff] || (scheduled[staff] && scheduled[staff].length < staffData[staff].max_shifts);
+            const isNotScheduledToday = !scheduled[staff] || !scheduled[staff].includes(day);
+            const slotDayIdentifier = `${slot}_${day}`;
+            const isNotFilledBasedOnPreferences = !filledSlots.has(slotDayIdentifier);
+
+            // Log the reasoning for inclusion or exclusion
+            // console.log(`${staff} - hasNotReachedMaxShifts: ${hasNotReachedMaxShifts}, isNotScheduledToday: ${isNotScheduledToday}, isNotFilledBasedOnPreferences: ${isNotFilledBasedOnPreferences}`);
+
+            return hasNotReachedMaxShifts && isNotScheduledToday && isNotFilledBasedOnPreferences;
+        }))
+        // You may keep the sorting logic here if it's crucial for your application logic
+        .sort((a, b) => {
+            const shiftsA = currentSchedule[a] ? currentSchedule[a].length : 0;
+            const shiftsB = currentSchedule[b] ? currentSchedule[b].length : 0;
+            return staffData[b].max_shifts - shiftsB - (staffData[a].max_shifts - shiftsA);
+        });
+
+        // console.log("Staff members after filtering:", staffMembers);
+
         for (let staff of staffMembers) {
+            // Given the earlier filtering, these conditions might always be false. 
+            // You may not need these checks anymore, but they are kept for safety.
             if (scheduled[staff] && scheduled[staff].length >= staffData[staff].max_shifts) {
+                // console.log(`Skipping ${staff} as they have reached their max shifts.`);
                 continue;
             }
-            if (scheduled[staff] && scheduled[staff].includes(day)) continue;
-
-            let venue, shift;
-
-            if (slot.includes("Lunch")) {
-                venue = "Bothams"; 
-                shift = "lunch";
-            } else if (slot.includes("Hole")) {
-                venue = "Hole";
-                shift = "evening";
-            } else if (slot.includes("Bothams")) {
-                venue = "Bothams";
-                shift = "evening";
-            } else if (slot.includes("Runner 1")) {
-                venue = "Bothams";
-                shift = "Runner 1";
-            } else if (slot.includes("Runner 2")) {
-                venue = "Bothams";
-                shift = "Runner 2";
-            } else if (slot.includes("Runner 3")) {
-                venue = "Bothams";
-                shift = "Runner 3";
+            if (scheduled[staff] && scheduled[staff].includes(day)) {
+                // console.log(`Skipping ${staff} as they are already scheduled for ${day}.`);
+                continue;
             }
 
-            const currentDayDate = addDays(startDate, daysOfWeek.indexOf(day)); // Get the actual date for the day
+            let slotDayIdentifier = `${slot}_${day}`;
+            if (filledSlots.has(slotDayIdentifier)) {
+                // console.log(`Skipping ${slot} on ${day} - already filled based on preferences.`);
+                continue;
+            }
 
-            if (isStaffAvailable(staff, venue, shift, day) && !isStaffBookedOff(staff, currentDayDate)) {
-                // console.log(`[NON-RESTRICTED] ${staff} is being considered for ${slot} on ${day}`);
-                currentSchedule[slot][day] = staff;
+                    let venue, shift;
 
-                if (!scheduled[staff]) {
-                    scheduled[staff] = [];
+                    // Determine venue and shift based on slot
+                    if (slot.includes("Lunch1")) {
+                        venue = "Bothams"; 
+                        shift = "lunch";
+                    } else if (slot.includes("Lunch2")) {
+                        venue = "Bothams";
+                        shift = "lunch";
+                    } else if (slot.includes("Hole")) {
+                        venue = "Hole";
+                        shift = "evening";
+                    } else if (slot.includes("Bothams")) {
+                        venue = "Bothams";
+                        shift = "evening";
+                    } else if (slot.includes("Runner 1")) {
+                        venue = "Bothams";
+                        shift = "Runner 1";
+                    } else if (slot.includes("Runner 2")) {
+                        venue = "Bothams";
+                        shift = "Runner 2";
+                    } else if (slot.includes("Runner 3")) {
+                        venue = "Bothams";
+                        shift = "Runner 3";
+                    }
+        
+                    if (isStaffAvailable(staff, venue, shift, day) && !isStaffBookedOff(staff, addDays(startDate, daysOfWeek.indexOf(day)))) {
+                        currentSchedule[slot][day] = staff;
+                        if (!scheduled[staff]) scheduled[staff] = [];
+                        scheduled[staff].push(day);
+                        // console.log(`RES SLOT Assigned ${staff} to ${slot} on ${day}`);
+                        break;
+                    }
                 }
-                scheduled[staff].push(day);
-                break;
-            }
+            });
         }
-    }
-}
 
+        // Process non-restricted slots
+        // Before starting non-restricted slot processing
+// Process non-restricted slots
+slots.filter(slot => !Object.keys(restrictedSlots).includes(slot)).forEach(slot => {
+    daysOfWeek.forEach(day => {
+        if (filledSlots.has(`${slot}_${day}`)) {
+            // console.log(`Skipping ${slot} on ${day} - already filled during preferences.`);
+            return;
+        }
 
-        attempts++;  // Increment the attempts counter
+        let staffMembers = Object.keys(staffData)
+            .filter(staff => {
+                const hasNotReachedMaxShifts = !scheduled[staff] || scheduled[staff].length < staffData[staff].max_shifts;
+                const isNotScheduledToday = !scheduled[staff] || !scheduled[staff].includes(day);
+                return hasNotReachedMaxShifts && isNotScheduledToday;
+            })
+            .sort((a, b) => {
+                const shiftsA = currentSchedule[a] ? currentSchedule[a].length : 0;
+                const shiftsB = currentSchedule[b] ? currentSchedule[b].length : 0;
+                return (staffData[b].max_shifts - shiftsB) - (staffData[a].max_shifts - shiftsA);
+            });
+
+        staffMembers.forEach(staff => {
+            // Skip if staff member has already been assigned to their max shifts or is scheduled for the day
+            if (scheduled[staff] && scheduled[staff].length >= staffData[staff].max_shifts) return;
+            if (scheduled[staff] && scheduled[staff].includes(day)) return;
+                    let venue, shift;
+
+                    // Determine venue and shift based on slot
+                    if (slot.includes("Lunch1")) {
+                        venue = "Bothams"; 
+                        shift = "lunch";
+                    } else if (slot.includes("Lunch2")) {
+                        venue = "Bothams";
+                        shift = "lunch";
+                    } else if (slot.includes("Hole")) {
+                        venue = "Hole";
+                        shift = "evening";
+                    } else if (slot.includes("Bothams")) {
+                        venue = "Bothams";
+                        shift = "evening";
+                    } else if (slot.includes("Runner 1")) {
+                        venue = "Bothams";
+                        shift = "Runner 1";
+                    } else if (slot.includes("Runner 2")) {
+                        venue = "Bothams";
+                        shift = "Runner 2";
+                    } else if (slot.includes("Runner 3")) {
+                        venue = "Bothams";
+                        shift = "Runner 3";
+                    }
+
+                    if (isStaffAvailable(staff, venue, shift, day) && !isStaffBookedOff(staff, addDays(startDate, daysOfWeek.indexOf(day)))) {
+                        currentSchedule[slot][day] = staff;
+                        scheduled[staff] = [...(scheduled[staff] || []), day];
+                        // console.log(`Assigned ${staff} to ${slot} on ${day}`);
+                    }
+                });
+            });
+        });
+
+        attempts++;
     } while (!isScheduleFull(currentSchedule, restrictedSlots) && attempts < MAX_ATTEMPTS);
-    console.log("Current schedule before return:", JSON.stringify(currentSchedule, null, 2));
+
+    // console.log("Final schedule:", JSON.stringify(currentSchedule, null, 2));
+
     return currentSchedule;
 };
+
 
 // Fill Any empty slots with "Ben" after max attempts reached.
 function BenFill(currentSchedule, slots, daysOfWeek) {
 for (let slot of slots) {
     for (let day of daysOfWeek) {
         if (!currentSchedule[slot][day] && isSlotActiveOnDay(slot, day)) {
-            console.log("BEN TIME ACTUALLY WORKED")
+            // console.log("BEN TIME ACTUALLY WORKED")
             currentSchedule[slot][day] = "BEN";
         }
     }

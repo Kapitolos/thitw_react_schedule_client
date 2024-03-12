@@ -102,9 +102,30 @@ button:hover {
   position: relative;
   z-index: 0;
 }
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: black; }
+}
+
+#test {
+  border-right: .15em solid black; /* The cursor */
+  white-space: nowrap; /* Keep the text on a single line */
+  overflow: hidden; /* Hide the text outside the container */
+  width: 0; /* Start with no width */
+  animation: typing 3.5s steps(40, end);
+  /* 
+    typing: Animate the width, 3.5s duration, 40 steps for each character. Adjust steps based on the text length for best results.
+    blink-caret: Blinking cursor effect at the end of the text.
+  */
+}
 
 .schedule-table td {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 .schedule-table th,

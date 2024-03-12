@@ -159,10 +159,10 @@ const updateRestrictedSlots = (updatedSlots) => {
 
     return (
         <div className="navbar">
-        <button className={`navbarButton ${activeButton === 'toggleStaffList' ? 'active' : ''}`} onClick={() => handleButtonClick('toggleStaffList')}>Toggle Staff List</button>
+        <button className={`navbarButton ${activeButton === 'toggleStaffList' ? 'active' : ''}`} onClick={() => handleButtonClick('toggleStaffList')}>Staff List</button>
         <button className={`navbarButton ${activeButton === 'saveSchedule' ? 'active' : ''}`} onClick={() => handleButtonClick('saveSchedule')}>Save Schedule</button>
         <button className={`navbarButton ${activeButton === 'toggleRestrictedSlotsEditor' ? 'active' : ''}`} onClick={() => handleButtonClick('toggleRestrictedSlotsEditor')}>
-            {showRestrictedSlotsEditor ? 'Hide Venue Days' : 'Show Venue Days'}
+            {showRestrictedSlotsEditor ? 'Venue Days' : 'Venue Days'}
         </button>
 
             {/* Conditionally render the RestrictedSlotsEditor */}
